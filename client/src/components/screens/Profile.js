@@ -104,7 +104,10 @@ const Profile = () => {
       {
         mypics.map(item => {
           return (
-          <Card.Img key={item._id} src={item.photo} alt={item.title} />
+            <Col>
+            <Card.Img key={item._id} src={item.photo} alt={item.title} />
+            </Col>
+         
           )
         })
       }
