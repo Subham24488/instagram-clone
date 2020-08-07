@@ -6,7 +6,16 @@ var jwt = require('jsonwebtoken');
 const {JWT_SECRET} = require('../config/keys');
 const User = mongoose.model("User");
 const requireLogin = require('../middleware/requireLogin')
+const nodemailer = require('nodemailer')
+const sendgridTransport = require('nodemailer-sendgrid-transport')
 
+//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
+
+const transporter = nodemailer.createTransport(sendgridTransport({
+    auth:{
+         api_key:"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"
+    }
+}))
 
 router.get("/protected", requireLogin, (req, res) => {
     res.send("hello user")
@@ -32,6 +41,12 @@ router.post("/signup", (req, res) => {
                 })
                 user.save()
                 .then(user => {
+                    transporter.sendMail({
+                        to:user.email,
+                        from:"no-reply@insta.com",
+                        subject:"signup success",
+                        html:"<h1>Welcome to social age</h1>"
+                    })
                    res.json({message:"saved successfully"})
                 })
                 .catch(err => {
